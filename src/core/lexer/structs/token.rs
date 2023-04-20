@@ -5,7 +5,8 @@ pub enum TokenType {
   Variable,
   Identifier,
   Int,
-  // Float,
+  Float,
+  String,
   Equals,
   IsEqualTo,
 }

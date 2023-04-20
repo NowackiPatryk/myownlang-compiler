@@ -1,7 +1,9 @@
 mod structs;
+mod processors;
 use self::structs::token::Token;
 use self::structs::token::TokenType;
 use self::structs::token::get_keyword_hashes;
+use self::processors::get_tokens_from_variable_declaration;
 
 fn get_code_lines(code: &str) -> Vec<&str>{
   let lines: Vec<&str> = code.split(";").collect();
@@ -21,17 +23,8 @@ fn get_tokens_from_line(code_line: &str) -> Vec<Token> {
 
 
   if is_variable_declaration {
-    tokens.push(Token { typed_as: TokenType::Variable, value: None });
-
-    let parts: Vec<&str> = code_line.split("=").collect();
-    let declaration_part: Vec<&str> = parts[0].split(variable_keyword).collect();
-
-    let variable_value = parts[1];
-    let identifier = declaration_part[1];
-
-    tokens.push(Token {typed_as: TokenType::Identifier, value: Some(identifier.to_string())});
-    tokens.push(Token {typed_as: TokenType::Equals, value: None});
-    tokens.push(Token{ typed_as: TokenType::Int, value: Some(variable_value.to_string())});
+    let mut variable_declaration_tokens = get_tokens_from_variable_declaration(code_line, variable_keyword);
+    tokens.append(&mut variable_declaration_tokens);
   }
 
     tokens
